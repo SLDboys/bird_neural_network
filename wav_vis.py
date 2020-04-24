@@ -30,7 +30,7 @@ def format_db(x, pos=None):
     db = 20 * math.log10(abs(x) / float(peak))
     return int(db)
 
-wav = wave.open(r"C:\Users\degaf\Desktop\birds005.wav", mode="r")
+wav = wave.open(r"C:\Users\DNS\Desktop\crow.wav", mode="r")
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = wav.getparams()
 
 duration = nframes / framerate
