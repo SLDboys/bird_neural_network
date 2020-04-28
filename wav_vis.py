@@ -1,8 +1,6 @@
 import wave
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-import math
 
 types = {
     1: np.int8,
@@ -10,53 +8,20 @@ types = {
     4: np.int32
 }
 
-def format_time(x, pos=None):
-    global duration, nframes, k
-    progress = int(x / float(nframes) * duration * k)
-    mins, secs = divmod(progress, 60)
-    hours, mins = divmod(mins, 60)
-    out = "%d:%02d" % (mins, secs)
-    if hours > 0:
-        out = "%d:" % hours
-    return out
+namefile = "crow.wav"
 
-def format_db(x, pos=None):
-    if pos == 0:
-        return ""
-    global peak
-    if x == 0:
-        return "-inf"
-
-    db = 20 * math.log10(abs(x) / float(peak))
-    return int(db)
-
-wav = wave.open(r"C:\Users\DNS\Desktop\crow.wav", mode="r")
-(nchannels, sampwidth, framerate, nframes, comptype, compname) = wav.getparams()
+w = wave.open(namefile, 'r')
+(nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
 
 duration = nframes / framerate
-w, h = 800, 400
-k = (nframes/w)/(sampwidth * 8)
-DPI = 72
-peak = 256 ** sampwidth / 2
+frames = w.readframes(nframes)
+samples = np.frombuffer(frames, dtype= types[sampwidth])
+lens = len(samples)
+x = np.arange(1, len(samples)+1)
+y = samples
 
-content = wav.readframes(nframes)
-samples = np.frombuffer(content, dtype=types[sampwidth])
-
-plt.figure(1, figsize=(float(w)/DPI, float(h)/DPI), dpi=DPI)
-plt.subplots_adjust(wspace=0, hspace=0)
-
-for n in range(nchannels):
-    channel = samples[n::nchannels]
-    channel = channel[0::int(k)+1]
-    if nchannels == 1:
-        channel = channel - peak
-
-    axes = plt.subplot(2, 1, n+1, facecolor="k")
-    axes.plot(channel, "g")
-    axes.yaxis.set_major_formatter(ticker.FuncFormatter(format_db))
-    plt.grid(True, color="w")
-    axes.xaxis.set_major_formatter(ticker.NullFormatter())
-
-axes.xaxis.set_major_formatter(ticker.FuncFormatter(format_time))
-plt.savefig("wave", dpi=DPI)
-plt.show()
+fig, ax = plt.subplots()
+ax.plot(x, y)
+fig.savefig("test.png")
+fig.show()
+w.close()
