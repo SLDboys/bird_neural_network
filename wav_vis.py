@@ -8,14 +8,13 @@ types = {
     4: np.int32
 }
 
-namefile = r"sounds\crow\birds005.wav"
+namefile = r"sounds\crow\birds017.wav"
 
 w = wave.open(namefile, 'r')
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
 frames = w.readframes(nframes)
-
 samples = np.frombuffer(frames, dtype=types[sampwidth])
-
+print(w.getparams())
 # преобразование фурье
 fft = np.absolute(np.fft.fft(samples))
 
@@ -35,6 +34,7 @@ axes[0].set_title('Original audio', fontsize=14)
 axes[0].set_xlabel('Number of frames', fontsize=10)
 axes[0].set_ylabel('Value frame', fontsize=10)
 axes[0].grid(True, c='lightgray', alpha=0.5)
+
 
 axes[1].set_title('FFT', fontsize=14)
 axes[1].set_xlabel('Hz', fontsize=10)
