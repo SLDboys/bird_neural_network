@@ -8,7 +8,7 @@ types = {
     4: np.int32
 }
 
-namefile = r"sound\crow.wav"
+namefile = r"sounds\crow\birds005.wav"
 
 w = wave.open(namefile, 'r')
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
