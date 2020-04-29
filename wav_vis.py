@@ -8,7 +8,7 @@ types = {
     4: np.int32
 }
 
-namefile = r"sound\crow.wav"
+namefile = r"crow\birds005.wav"
 namefile1 = r"peacock\birds010.wav"
 
 w = wave.open(namefile, 'r')
