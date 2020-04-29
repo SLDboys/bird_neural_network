@@ -8,7 +8,7 @@ types = {
     4: np.int32
 }
 
-namefile = r"sounds\crow\birds017.wav"
+namefile = r"sounds\crow\birds005.wav"
 
 w = wave.open(namefile, 'r')
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
@@ -17,6 +17,7 @@ samples = np.frombuffer(frames, dtype=types[sampwidth])
 print(w.getparams())
 # преобразование фурье
 fft = np.absolute(np.fft.fft(samples))
+fft = fft / fft.max()
 
 # координаты для графика волны
 x = np.arange(1, len(samples) + 1)
