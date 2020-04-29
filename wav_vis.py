@@ -9,42 +9,58 @@ types = {
 }
 
 namefile = r"sound\crow.wav"
+namefile1 = r"sound\crows.wav"
 
 w = wave.open(namefile, 'r')
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
 frames = w.readframes(nframes)
 
+w1 = wave.open(namefile1, 'r')
+(nchannels1, sampwidth1, framerate1, nframes1, comptype1, compname1) = w1.getparams()
+frames1 = w1.readframes(nframes)
+
 samples = np.frombuffer(frames, dtype=types[sampwidth])
+samples1 = np.frombuffer(frames1, dtype=types[sampwidth1])
 
 # преобразование фурье
 fft = np.absolute(np.fft.fft(samples))
+fft1 = np.absolute(np.fft.fft(samples1))
 
 # координаты для графика волны
-x = np.arange(1, len(samples) + 1)
-y = samples
+x_fft1 = np.absolute(np.fft.fftfreq(len(samples1), 1 / framerate1))  # вычисляет частоты
+y_fft1 = fft1
 
 # координаты для преобразования фурье
 x_fft = np.absolute(np.fft.fftfreq(len(samples), 1 / framerate))  # вычисляет частоты
 y_fft = fft
 
 # Постройка графика
-fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 10))
+fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(20, 10))
 fig.subplots_adjust(wspace=0, hspace=0.3)
 
-axes[0].set_title('Original audio', fontsize=14)
-axes[0].set_xlabel('Number of frames', fontsize=10)
-axes[0].set_ylabel('Value frame', fontsize=10)
+axes[0].set_title('FFT1', fontsize=14)
+axes[0].set_xlabel('Hz', fontsize=10)
+axes[0].set_ylabel('Value fourier', fontsize=10)
 axes[0].grid(True, c='lightgray', alpha=0.5)
+axes[0].plot(x_fft1, y_fft1)
 
-axes[1].set_title('FFT', fontsize=14)
+axes[1].set_title('FFT2', fontsize=14)
 axes[1].set_xlabel('Hz', fontsize=10)
 axes[1].set_ylabel('Value fourier', fontsize=10)
 axes[1].grid(True, c='lightgray', alpha=0.5)
-
-axes[0].plot(x, y)
 axes[1].plot(x_fft, y_fft)
+
+axes[2].set_title('FFT1 + FFT2', fontsize=14)
+axes[2].set_xlabel('Hz', fontsize=10)
+axes[2].set_ylabel('Value fourier', fontsize=10)
+axes[2].grid(True, c='lightgray', alpha=0.5)
+axes[2].plot(x_fft, y_fft)
+axes[2].plot(x_fft1, y_fft1, c="orange")
+
 
 fig.savefig("wave.png")
 fig.show()
 
 w.close()
+
+w1.close()
