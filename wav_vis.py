@@ -16,6 +16,7 @@ w = wave.open(namefile, 'r')
 frames = w.readframes(nframes)
 samples = np.frombuffer(frames, dtype=types[sampwidth])
 print(w.getparams())
+
 # преобразование фурье
 # fft = np.absolute(np.fft.fft(samples))
 
@@ -23,9 +24,10 @@ print(w.getparams())
 # ham = signal.hamming(len(samples))
 # fft = np.absolute(np.fft.fft(samples * ham))
 
-win = signal.gaussian(len(samples), std = 15)
+win = signal.gaussian(len(samples), std=15)
 fft = np.absolute(np.fft.fft(samples * win))
 
+# нормировка
 fft = fft / fft.max()
 
 # координаты для графика волны
