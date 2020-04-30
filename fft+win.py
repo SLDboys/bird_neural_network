@@ -1,5 +1,4 @@
 import wave
-# from scipy import signal
 from scipy import signal
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,7 +9,7 @@ types = {
     4: np.int32
 }
 
-namefile = r"crow.wav"
+namefile = r"sounds\crow\birds005.wav"
 
 w = wave.open(namefile, 'r')
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
@@ -19,11 +18,11 @@ samples = np.frombuffer(frames, dtype=types[sampwidth])
 print(w.getparams())
 # преобразование фурье
 # ham = np.hamming(len(samples))
-ham = signal.hamming(len(samples))
-# win = signal.gaussian(len(samples), std = 7)
+# ham = signal.hamming(len(samples))
+win = signal.gaussian(len(samples), std = 15)
 # fft = np.absolute(np.fft.fft(samples))
-# fft = np.absolute(np.fft.fft(samples * win))
-fft = np.absolute(np.fft.fft(samples * ham))
+fft = np.absolute(np.fft.fft(samples * win))
+# fft = np.absolute(np.fft.fft(samples * ham))
 
 # координаты для графика волны
 x = np.arange(1, len(samples) + 1)
