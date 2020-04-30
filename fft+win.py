@@ -1,4 +1,5 @@
 import wave
+#from sklearn.decomposition import PCA
 from scipy import signal
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,14 +16,23 @@ w = wave.open(namefile, 'r')
 (nchannels, sampwidth, framerate, nframes, comptype, compname) = w.getparams()
 frames = w.readframes(nframes)
 samples = np.frombuffer(frames, dtype=types[sampwidth])
+# Вычетание среднего (нужно для убирания нулевой гармоники)
+# avr = sum(samples)/len(samples)
+# smpl = np.zeros(len(samples))
+# for i in range(len(smpl)):
+#     smpl[i] = samples[i] - avr
+# samples = smpl
 print(w.getparams())
 # преобразование фурье
+# fft = np.absolute(np.fft.fft(samples))
+
 # ham = np.hamming(len(samples))
 # ham = signal.hamming(len(samples))
-win = signal.gaussian(len(samples), std = 15)
-# fft = np.absolute(np.fft.fft(samples))
-fft = np.absolute(np.fft.fft(samples * win))
 # fft = np.absolute(np.fft.fft(samples * ham))
+
+win = signal.windows.gaussian(len(samples), std=15)
+fft = np.absolute(np.fft.fft(samples * win))
+fft = fft / fft.max()
 
 # координаты для графика волны
 x = np.arange(1, len(samples) + 1)
