@@ -38,7 +38,8 @@ print(w.getparams())
 # fft = np.absolute(np.fft.fft(samples * ham))
 
 # прореживание
-thinned_samples = thinsamples(samples, 0.1) # thin_crop подбирать имперически
+thinfactor = 1
+thinned_samples = thinsamples(samples, thinfactor) # thin_crop подбирать имперически
 
 win = signal.gaussian(len(samples), std=15)
 fft = np.absolute(np.fft.fft(samples * win))
@@ -67,7 +68,9 @@ axes[0].set_xlabel('Number of frames', fontsize=10)
 axes[0].set_ylabel('Value frame', fontsize=10)
 axes[0].grid(True, c='lightgray', alpha=0.5)
 
-axes[2].set_title('Thinned', fontsize=14)
+str_thin ="Thin with thin_factor {}".format(thinfactor)
+
+axes[2].set_title(str_thin, fontsize=14)
 axes[2].set_xlabel('Number of frames', fontsize=10)
 axes[2].set_ylabel('Value frame', fontsize=10)
 axes[2].grid(True, c='lightgray', alpha=0.5)
