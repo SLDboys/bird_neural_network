@@ -19,7 +19,7 @@ class Date:
 
     # прорежает сепмлы
     # thin_factor - коэф.
-    def _thinSamples(self, samples,  thin_factor):
+    def _thinSamples(self, samples, thin_factor):
         thinned_samples = []  # создаем пустой список
         average = np.sum(np.absolute(samples)) / len(samples)  # абсолютное среднее значение
         for i in samples:
@@ -41,7 +41,10 @@ class Date:
         # прорежает семплы
         self._thinned_samples = self._thinSamples(self._samples, self._thin_factor)
 
+        # умножение на окно
         window = signal.gaussian(len(self._samples), std=self._sigma_window)
+
+        # преобразование фурье
         self._fft_array = np.absolute(np.fft.fft(self._samples * window))
 
         # нормировка
