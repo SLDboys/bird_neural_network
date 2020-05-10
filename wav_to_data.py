@@ -27,7 +27,7 @@ class Date:
         for i in samples:
             if np.absolute(i) > average * thin_factor:
                 thinned_samples.append(i)
-        np.asarray(thinned_samples)  # превращает в массив нампая
+        thinned_samples = np.asarray(thinned_samples)  # превращает в массив нампая
         return thinned_samples
 
     # Необязательные аргументы thin_factor и sigma нужны для простоты подгона значений
