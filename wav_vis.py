@@ -12,7 +12,7 @@ def thinsamples(samples, thin_factor):
     for i in samples:
         if np.absolute(i) > average * thin_factor:
             thinned_samples.append(i)
-    np.asarray(thinned_samples) # превращает в массив нампая
+    thinned_samples = np.asarray(thinned_samples) # превращает в массив нампая
     return thinned_samples
 
 
@@ -39,11 +39,16 @@ print(w.getparams())
 
 # прореживание
 thinfactor = 1
-thinned_samples = thinsamples(samples, thinfactor) # thin_crop подбирать имперически
-
-win = signal.gaussian(len(samples), std=15)
-fft = np.absolute(np.fft.fft(samples * win))
-
+thinned_samples = thinsamples(samples, thinfactor) # thin_crop подбирать эмперически
+fft = np.zeros(1024) # делаем изначальный нампай массив
+win = signal.gaussian(1024, std=15) # создаём гауссово окно размером 1024
+np.append(thinned_samples, np.zeros(len(thinned_samples)%1024)) # дополняем прорезанный массив семплов
+                                                                # до кратного 1024 нулями
+for i in range(len(thinned_samples)//1024):
+    temp = thinned_samples[i*1024:(i+1)*1024] # берём часть массива длинной 1024 элемента (семпла)
+    fft += np.absolute(np.fft.fft(temp * win)) # прибавляем к итоговому массиву результат
+                                               # оконного преобразования фурье части массива
+fft = fft / (len(thinned_samples)//1024) # делим массив на количество фрагментов, которые прибавляли
 # нормировка
 fft = fft / fft.max()
 
@@ -56,7 +61,7 @@ thin_x = np.arange(1, len(thinned_samples) + 1)
 thin_y = thinned_samples
 
 # координаты для преобразования фурье
-x_fft = np.absolute(np.fft.fftfreq(len(samples), 1 / framerate))  # вычисляет частоты
+x_fft = np.absolute(np.fft.fftfreq(1024, 1 / framerate))  # вычисляет частоты
 y_fft = fft
 
 # Постройка графика
