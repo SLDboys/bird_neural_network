@@ -16,6 +16,12 @@ def thinsamples(samples, thin_factor):
     return thinned_samples
 
 
+# определяет индекс по частоте, кол-ву семплов и фреймрейту
+# если индекс получился дробным, то округляет его
+def indOfFreq(freq, lenght, framerate):
+    return round((freq/framerate) * lenght)
+
+
 types = {
     1: np.int8,
     2: np.int16,
