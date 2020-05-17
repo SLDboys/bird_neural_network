@@ -62,16 +62,6 @@ idl = []
 for i in range(b-a):
     idl.append(i)
 
-
-# все локальные максимумы
-loc_m = []
-for i in range(1, b-a-1):
-    if fft[i-1] < fft[i] and fft[i+1] <  fft[i]:
-        loc_m.append(i)
-# print(loc_m)
-# for i in loc_m:
-#     print(fft[i])
-
 # координаты для графика волны
 x = np.arange(1, len(samples) + 1)
 y = samples
@@ -85,13 +75,6 @@ x_fft = np.absolute(np.fft.fftfreq(fft_len, 1 / framerate))  # вычисляе�
 
 x_fft = x_fft[a:b]
 y_fft = fft
-
-loc_m_hz = []
-loc_m_fft = []
-for i in loc_m:
-    loc_m_hz.append(x_fft[i])
-    loc_m_fft.append(fft[i])
-
 
 # Постройка графика
 fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 10))
@@ -117,7 +100,6 @@ axes[1].grid(True, c='lightgray', alpha=0.5)
 axes[0].plot(x, y)
 axes[2].plot(thin_x, thin_y)
 axes[1].plot(x_fft, y_fft)
-axes[1].scatter(loc_m_hz, loc_m_fft, c="deeppink")
 
 fig.savefig("wave.png")
 fig.show()
